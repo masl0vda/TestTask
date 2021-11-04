@@ -32,6 +32,8 @@ services:
       - --web.external-url=http://localhost/prometheus
     volumes:
       - ./prometheus:/etc/prometheus
+    depends_on:
+      - node_exp
 
   node_exp:
     image: prom/node-exporter
@@ -46,3 +48,13 @@ services:
             - --path.sysfs=/host/sys
             - --collector.filesystem.ignored-mount-points
             - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
+  jbpm:
+    image: jboss/jbpm-server-full:7.59.0.Final
+    container_name: jbpm_testtask2
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14
+    container_name: postgres_testtask2
+    restart: always
