@@ -3,7 +3,7 @@ version: '3.7'
 services:
   nginx:
     image: nginx
-    container_name: nginx_testtask2
+    container_name: nginx_testtask
     ports:
       - "80:80"
     volumes:
@@ -12,10 +12,11 @@ services:
       - ./nginx/html:/usr/share/nginx/html:ro
     depends_on:
       - grafana
+      - jbpm
 
   grafana:
     image: grafana/grafana
-    container_name: grafana_testtask2
+    container_name: grafana_testtask
     restart: always
     volumes:
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
@@ -24,7 +25,7 @@ services:
 
   prometheus:
     image: prom/prometheus
-    container_name: prometheus_testtask2
+    container_name: prometheus_testtask
     restart: always
     command:
       - --config.file=/etc/prometheus/prometheus.yaml
@@ -37,7 +38,7 @@ services:
 
   node_exp:
     image: prom/node-exporter
-    container_name: node-exporter_testtask2
+    container_name: node-exporter_testtask
     restart: always
     volumes:
       - /proc:/host/proc:ro
@@ -48,13 +49,25 @@ services:
             - --path.sysfs=/host/sys
             - --collector.filesystem.ignored-mount-points
             - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
+
   jbpm:
-    image: jboss/jbpm-server-full:7.59.0.Final
-    container_name: jbpm_testtask2
+    image: jboss/jbpm-server-full
+    container_name: jbpm_testtask
+    environment:
+      JBPM_DB_DRIVER: postgres
+      JBPM_DB_HOST: postgres_testtask
+      JBPM_DB_PORT: 5432
+      JBPM_DB_NAME: jbpm
+      JBPM_DB_USER: jbpm
+      JBPM_DB_PASSWORD: jbpm
     depends_on:
       - postgres
 
   postgres:
-    image: postgres:14
-    container_name: postgres_testtask2
+    image: postgres
+    container_name: postgres_testtask
     restart: always
+    environment:
+      - POSTGRES_PASSWORD=jbpm
+      - POSTGRES_USER=jbpm
+      - POSTGRES_DB=jbpm

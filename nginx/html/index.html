@@ -1,23 +1,52 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Welcome to nginx!</title>
+    <title>Test Task.</title>
     <style>
     html { color-scheme: light dark; }
     body { width: 35em; margin: 0 auto;
     font-family: Tahoma, Verdana, Arial, sans-serif; }
     </style>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   </head>
   <body>
-    <h1>Welcome to nginx!</h1>
-    <p>If you see this page, the nginx web server is successfully installed and
-    working. Further configuration is required.</p>
+    <h1>Тестовое задание.</h1>
+    <p>Задача:<br />
+      Подготовить docker-compose проект в котором должны быть развернуты контейнеры</p>
+    <p>Jbpm<br />
+      Nginx<br />
+      Postgres<br />
+      Prometheus<br />
+      Grafana<br />
+      Node-exporter</p>
 
-    <p>Grafana
-    <a href="http://localhost/grafana">Grafana</a>.<br/>
-    Prometheus
-    <a href="http://localhost/prometheus">Prometheus</a>.</p>
+    <p>Проверка правильности выполнения задания:<br />
+      Для выполненного задания все запросы поступают на 80 порт через Nginx контейнер (запросы проксируются в Jbpmn и Grafana на разные endpoint-ы). Остальные порты должны быть закрыты.<br />
+      Jbpmn настроен на работу с СУБД postgres<br />
+      Grafana настроена на работу с Prometheus.Внутри Grafana настроен dashboard для отображение метрик из Prometheus. Prometheus забирает метрики с host машины (node-exporter)</p>
 
-    <p><em>Thank you for using nginx.</em></p>
+    <p>В качестве host-машины использован сервер Ubuntu 20.04<br/>
+      Docker версии 20.10.8<br/>
+      Docker-compose версии 2.0.1<br/>
+      Для запуска проекта необходимо выполнить "docker-compose up -d" в каталоге проекта.<br/>
+      Общее время запуска ~5-6 минут, не считая загрузку образов. </p>
+
+    <p>Для входа в grafana используйте логин/пароль:admin/admin<br/>
+      В настройках Grafana необходимо указать ссылку на Prometheus<br/>
+      configuration -> data source -> add data source<br/>
+      в качестве сервера выбрать Prometheus и установить URL "http://prometheus_testtask:9090/"<br/>
+      <em>Установка "dashboard по умолчанию" в процессе...</em></p>
+
+    <p>Prometheus по умолчанию подключается к node-exporter.<br/>
+      Это можно проверить в настройках status -> targets</p>
+
+    <p>Для входа в jBPM используйте логин/пароль:wbadmin/wbadmin</p>
+
+
+    <p>web-страница <a href="http://localhost/grafana">Grafana</a>.<br/>
+    web-страница <a href="http://localhost/prometheus">Prometheus</a>.<br/>
+    web-страница <a href="http://localhost/jbpm/business-central">jBPM- движок</a>.</p>
+
+    <p><em>Спасибо за внимание!</em></p>
   </body>
 </html>
